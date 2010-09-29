@@ -3,25 +3,32 @@
 #define BUZZER 5
 
 int isClose = 0;
+long previousMillis = 0;
 
 void setup() {
-  
-  
+	pinMode(CANDLELED, OUTPUT);
+	pinMode(REDLED, OUTPUT);
+	pinMode(BUZZER, OUTPUT);
 }
 
 void loop() {
-  if (isClose)
-  {
-    digitalWrite(CANDLELED, LOW);
-    delay(3000);
-    digitalWrite(REDLED, HIGH);
-    tone(BUZZER, 38);
-  }
+	//evaluate if subject is close here.
+
+	if (isClose)
+	{ //activate EVIL pumpkin:
+		digitalWrite(CANDLELED, LOW);
+		digitalWrite(REDLED, HIGH);
+		tone(BUZZER, 38);
+	}
   
-  else
-  {
-    noTone(BUZZER);
-    analogWrite(
-    
-  }
+	else
+	{ //regular candle flicker:
+		noTone(BUZZER);
+		unsigned long currentMillis = millis();
+		if(currentMillis - previousMillis > 200)
+		{
+			previousMillis = currentMillis;
+			analogWrite(CANDLELED, random(0, 256));
+		}
+	}
 }
