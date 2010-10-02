@@ -2,8 +2,10 @@
 #define REDLED 7
 #define BUZZER 5
 #define SENSOR 4
+#define PROXIMITY_THRESHOLD 56
+#define BUZZER_FREQUENCY 38
+#define FLICKER_SPEED 20
 
-int isClose = 0;
 long previousMillis = 0;
 
 void setup() {
@@ -11,23 +13,15 @@ void setup() {
 	pinMode(REDLED, OUTPUT);
 	pinMode(BUZZER, OUTPUT);
 	pinMode(SENSOR, INPUT);
+	delay(1000); // Allow the proximity sensor to initialize
 }
 
 void loop() {
-	if ( digitalRead(SENSOR) == HIGH )
-	{	
-		isClose = 1;
-	}
-	else
-	{
-		isClose = 0;
-	}
-	
-	if (isClose)
-	{ //activate EVIL pumpkin:
+	if (analogRead(0) > PROXIMITY_THRESHOLD) // Is someone close?
+	{ // Then activate EVIL pumpkin:
 		digitalWrite(CANDLELED, LOW);
 		digitalWrite(REDLED, HIGH);
-		tone(BUZZER, 38);
+		tone(BUZZER, BUZZER_FREQUENCY);
 	}
   
 	else
@@ -35,7 +29,7 @@ void loop() {
 		noTone(BUZZER);
 		digitalWrite(REDLED, LOW);
 		unsigned long currentMillis = millis();
-		if(currentMillis - previousMillis > 20)
+		if(currentMillis - previousMillis > FLICKER_SPEED)
 		{
 			previousMillis = currentMillis;
 			analogWrite(CANDLELED, random(0, 256));
