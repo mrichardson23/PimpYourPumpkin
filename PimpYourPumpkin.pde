@@ -18,7 +18,7 @@ void setup() {
 	delay(1000); // Allow the proximity sensor to initialize
 }
 void loop() {
-	if (analogRead(0) > PROXIMITY_THRESHOLD) // Is someone close?
+	if (analogRead(SENSOR) > PROXIMITY_THRESHOLD) // Is someone close?
 	{
 		closeReadings++;
 		if (closeReadings >= PROXIMITY_CONSECUTIVE_READINGS) // require n consecutive "close" readings before going into EVIL mode. This prevents little blips of the buzzer.
